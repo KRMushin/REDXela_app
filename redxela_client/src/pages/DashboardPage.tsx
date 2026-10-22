@@ -28,9 +28,8 @@ function DashboardPage({ backendStatus }: DashboardPageProps) {
       </div>
 
       <div className="module-grid">
-        {modules.map(({ name, description, icon }) => (
+        {modules.map(({ name, description}) => (
           <div key={name} className="module-card">
-            <div className="module-card-icon">{icon}</div>
             <h3 className="module-card-title">{name}</h3>
             <p className="module-card-description">{description}</p>
             <span className="module-card-badge">Pendiente de implementación</span>
