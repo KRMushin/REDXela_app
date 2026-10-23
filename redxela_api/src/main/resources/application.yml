@@ -17,3 +17,18 @@ management:
 app:
   name: REDXela
   version: 1.0.0
+
+simulacion:
+  time-scale-ms: 1000
+  capacidad-cola-recepcion: 50
+  tasa-generador-pedidos-minuto: 5
+  recursos:
+    estaciones-empaque: 6
+    areas-carga: 2
+    encargados-bodega: 10
+    montacargas: 3
+    control-calidad: 4
+    escaner: 1
+  almacen:
+    total-ubicaciones: 20
+    capacidad-por-ubicacion: 50
