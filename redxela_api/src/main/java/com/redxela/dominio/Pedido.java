@@ -31,6 +31,13 @@ public class Pedido {
     private final Set<TipoRecurso> recursosRetenidos = ConcurrentHashMap.newKeySet();
 
     public Pedido(String id, Cliente cliente, List<ItemPedido> items) {
+        this(id, cliente, items, System.currentTimeMillis());
+    }
+
+    /**
+     * Constructor con instante de creación explícito para simulaciones deterministas.
+     */
+    public Pedido(String id, Cliente cliente, List<ItemPedido> items, long tCreacion) {
         if (id == null || id.isBlank()) throw new IllegalArgumentException("El id es obligatorio");
         if (cliente == null) throw new IllegalArgumentException("El cliente es obligatorio");
         if (items == null || items.isEmpty()) throw new IllegalArgumentException("Debe contener artículos");
@@ -40,7 +47,7 @@ public class Pedido {
         this.nivel = cliente.nivelServicio();
         this.items = List.copyOf(items);
         this.totalArticulos = items.stream().mapToInt(ItemPedido::cantidad).sum();
-        this.tCreacion = System.currentTimeMillis();
+        this.tCreacion = tCreacion;
         this.estado = EstadoPedido.EN_ESPERA_STOCK;
         this.progreso = 0;
     }

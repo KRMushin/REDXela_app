@@ -1,6 +1,7 @@
 package com.redxela.estado;
 
 import com.redxela.api.dto.SnapshotEstado;
+import com.redxela.estadisticas.ServicioEstadisticas;
 import com.redxela.interbloqueo.DetectorInterbloqueo;
 import com.redxela.planificacion.Despachador;
 import com.redxela.recursos.GestorRecursos;
@@ -25,7 +26,7 @@ public class ServicioSnapshot {
     private final GeneradorPedidos generador;
     private final DetectorInterbloqueo detector;
     private final RelojSimulacion reloj;
-    private final CalculadoraEstadisticas estadisticas;
+    private final ServicioEstadisticas estadisticas;
 
     public ServicioSnapshot(
             MapeadorEstado mapeador,
@@ -35,7 +36,7 @@ public class ServicioSnapshot {
             GeneradorPedidos generador,
             DetectorInterbloqueo detector,
             RelojSimulacion reloj,
-            CalculadoraEstadisticas estadisticas
+            ServicioEstadisticas estadisticas
     ) {
         this.mapeador = mapeador;
         this.mapeadorAlmacen = mapeadorAlmacen;
@@ -51,7 +52,7 @@ public class ServicioSnapshot {
         long ahora = System.currentTimeMillis();
         return new SnapshotEstado(
                 ahora,
-                CalculadoraEstadisticas.redondear(reloj.getTiempoSimuladoTranscurridoMinutos()),
+                ServicioEstadisticas.redondear(reloj.getTiempoSimuladoTranscurridoMinutos()),
                 recursos.getModo(),
                 despachador.getTipoPoliticaActiva(),
                 generador.isActivo(),
@@ -61,7 +62,7 @@ public class ServicioSnapshot {
                 mapeador.listaEspera(ahora),
                 mapeadorAlmacen.almacen(),
                 detector.ultimoReporte(),
-                estadisticas.calcular()
+                estadisticas.calcularResumen()
         );
     }
 }

@@ -5,6 +5,7 @@ import com.redxela.dominio.EstadoPedido;
 import com.redxela.dominio.Pedido;
 import com.redxela.dominio.PedidoService;
 import com.redxela.dominio.TipoRecurso;
+import com.redxela.estadisticas.ServicioEstadisticas;
 import com.redxela.planificacion.Despachador;
 import com.redxela.planificacion.ElementoListaEspera;
 import com.redxela.recursos.EstadoRecurso;
@@ -116,8 +117,8 @@ public class MapeadorEstado {
                 elemento.totalArticulos(),
                 EstadoPedido.EN_ESPERA_RECURSOS,
                 elemento.tCreacion(),
-                CalculadoraEstadisticas.redondear(elemento.tiempoEsperaMinutos()),
-                CalculadoraEstadisticas.redondear(elemento.prioridadCalculada()),
+                ServicioEstadisticas.redondear(elemento.tiempoEsperaMinutos()),
+                ServicioEstadisticas.redondear(elemento.prioridadCalculada()),
                 elemento.motivoPosicion()
         );
     }
