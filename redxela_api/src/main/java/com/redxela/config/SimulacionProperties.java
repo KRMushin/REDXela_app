@@ -15,7 +15,8 @@ public record SimulacionProperties(
         int capacidadColaRecepcion,
         int tasaGeneradorPedidosMinuto,
         RecursosConfig recursos,
-        AlmacenConfig almacen
+        AlmacenConfig almacen,
+        InventarioConfig inventario
 ) {
 
     public record RecursosConfig(
@@ -30,5 +31,14 @@ public record SimulacionProperties(
     public record AlmacenConfig(
             int totalUbicaciones,
             int capacidadPorUbicacion
+    ) {}
+
+    /**
+     * Existencias con las que arranca el inventario al inicializar el sistema.
+     * Concepto de SO: contenido inicial del área de intercambio (swap) o del
+     * almacenamiento secundario antes de recibir nueva carga.
+     */
+    public record InventarioConfig(
+            int stockInicialPorProducto
     ) {}
 }

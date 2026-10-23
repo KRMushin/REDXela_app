@@ -32,3 +32,6 @@ simulacion:
   almacen:
     total-ubicaciones: 20
     capacidad-por-ubicacion: 50
+  inventario:
+    # Existencias iniciales por producto; 0 obliga a abastecer por Recepción
+    stock-inicial-por-producto: 50
