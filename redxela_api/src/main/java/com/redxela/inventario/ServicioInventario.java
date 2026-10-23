@@ -35,6 +35,7 @@ public class ServicioInventario {
     private final AsignadorUbicaciones asignador;
     private final CatalogoProductos catalogo;
     private final ApplicationEventPublisher eventos;
+    private final int stockInicialPorProducto;
 
     private volatile String ultimoError;
 
@@ -49,9 +50,10 @@ public class ServicioInventario {
         this.asignador = asignador;
         this.catalogo = catalogo;
         this.eventos = eventos;
-        sembrarStockInicial(properties.inventario() != null
+        this.stockInicialPorProducto = properties.inventario() != null
                 ? properties.inventario().stockInicialPorProducto()
-                : 0);
+                : 0;
+        sembrarStockInicial(stockInicialPorProducto);
     }
 
     /**
@@ -130,5 +132,17 @@ public class ServicioInventario {
 
     public void registrarError(String error) {
         this.ultimoError = error;
+    }
+
+    /**
+     * Devuelve el inventario y el almacén a su estado inicial y vuelve a sembrar
+     * las existencias de arranque. Debe invocarse con las tareas de pedidos detenidas.
+     */
+    public void reiniciar() {
+        lotes.clear();
+        deposito.limpiar();
+        asignador.limpiar();
+        this.ultimoError = null;
+        sembrarStockInicial(stockInicialPorProducto);
     }
 }

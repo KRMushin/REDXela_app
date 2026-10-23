@@ -16,7 +16,9 @@ public record SimulacionProperties(
         int tasaGeneradorPedidosMinuto,
         RecursosConfig recursos,
         AlmacenConfig almacen,
-        InventarioConfig inventario
+        InventarioConfig inventario,
+        long deteccionInterbloqueoMs,
+        long publicacionEstadoMs
 ) {
 
     public record RecursosConfig(

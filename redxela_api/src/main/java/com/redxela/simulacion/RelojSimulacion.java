@@ -17,12 +17,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RelojSimulacion {
 
     private final AtomicLong timeScaleMs;
-    private final long tInicioRealMs;
+    private final AtomicLong tInicioRealMs;
 
     public RelojSimulacion(SimulacionProperties properties) {
         long scale = properties.timeScaleMs() > 0 ? properties.timeScaleMs() : 1000L;
         this.timeScaleMs = new AtomicLong(scale);
-        this.tInicioRealMs = System.currentTimeMillis();
+        this.tInicioRealMs = new AtomicLong(System.currentTimeMillis());
     }
 
     public long convertirMinutosSimuladosAMsReales(double minutosSimulados) {
@@ -34,13 +34,28 @@ public class RelojSimulacion {
     }
 
     public double getTiempoSimuladoTranscurridoMinutos() {
-        long deltaReal = System.currentTimeMillis() - tInicioRealMs;
+        long deltaReal = System.currentTimeMillis() - tInicioRealMs.get();
         return convertirMsRealesAMinutosSimulados(deltaReal);
+    }
+
+    /**
+     * Reinicia el origen del tiempo virtual para una nueva simulación.
+     */
+    public void reiniciar() {
+        tInicioRealMs.set(System.currentTimeMillis());
     }
 
     public void pausarSimulado(double minutosSimulados) throws InterruptedException {
         long msReales = convertirMinutosSimuladosAMsReales(minutosSimulados);
         TimeUnit.MILLISECONDS.sleep(msReales);
+    }
+
+    /**
+     * Pausa real usada exclusivamente para simular el tiempo de trabajo de un proceso.
+     * Centralizar el sleep aquí evita usarlo como mecanismo de sincronización.
+     */
+    public void pausarMilisegundos(long msReales) throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(Math.max(1L, msReales));
     }
 
     public long getTimeScaleMs() {

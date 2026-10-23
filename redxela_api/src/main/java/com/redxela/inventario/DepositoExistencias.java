@@ -81,6 +81,18 @@ public class DepositoExistencias {
         return enLectura(() -> Map.copyOf(existencias));
     }
 
+    /**
+     * Elimina todas las existencias para reiniciar la simulación desde cero.
+     */
+    public void limpiar() {
+        cerrojo.writeLock().lock();
+        try {
+            existencias.clear();
+        } finally {
+            cerrojo.writeLock().unlock();
+        }
+    }
+
     /** Consulta concurrente bajo el cerrojo de lectura compartido. */
     private <T> T enLectura(Supplier<T> accion) {
         cerrojo.readLock().lock();

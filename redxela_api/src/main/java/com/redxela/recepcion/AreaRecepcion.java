@@ -94,6 +94,14 @@ public class AreaRecepcion {
         return buzon.isEmpty();
     }
 
+    /**
+     * Vacía el buzón y reinicia la numeración de lotes para una nueva simulación.
+     */
+    public void vaciar() {
+        buzon.clear();
+        secuencialLote.set(0);
+    }
+
     private String generarLoteId() {
         return String.format("LOTE-2026-%04d", secuencialLote.incrementAndGet());
     }

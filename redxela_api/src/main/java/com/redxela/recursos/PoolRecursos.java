@@ -107,4 +107,15 @@ public class PoolRecursos {
     public TipoRecurso getTipo() { return tipo; }
     public int getTotalUnidades() { return totalUnidades; }
     public int getDisponibles() { return semaforo.availablePermits(); }
+
+    /**
+     * Restaura el pool a su capacidad inicial. Solo se usa con las tareas canceladas,
+     * de modo que ningún hilo libere después un permiso ya contabilizado.
+     */
+    public void reiniciar() {
+        retenedores.clear();
+        enEspera.clear();
+        semaforo.drainPermits();
+        semaforo.release(totalUnidades);
+    }
 }

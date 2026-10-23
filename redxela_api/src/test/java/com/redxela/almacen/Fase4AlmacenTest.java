@@ -24,7 +24,7 @@ class Fase4AlmacenTest {
     private SimulacionProperties propiedades(int ubicaciones, int capacidad) {
         return new SimulacionProperties(1000L, 10, 5, null,
                 new SimulacionProperties.AlmacenConfig(ubicaciones, capacidad),
-                new SimulacionProperties.InventarioConfig(0));
+                new SimulacionProperties.InventarioConfig(0), 200L, 500L);
     }
 
     private AsignadorUbicaciones crearAsignador(int ubicaciones, int capacidad) {

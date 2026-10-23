@@ -39,6 +39,14 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> manejarEstadoInvalido(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "error", "ESTADO_INVALIDO",
+                "mensaje", e.getMessage() == null ? "El sistema no está en el estado requerido" : e.getMessage()
+        ));
+    }
+
     @ExceptionHandler(InterruptedException.class)
     public ResponseEntity<Map<String, Object>> manejarInterrupcion(InterruptedException e) {
         Thread.currentThread().interrupt(); // restaura la bandera de interrupción

@@ -4,6 +4,7 @@ import com.redxela.dominio.EstadoPedido;
 import com.redxela.dominio.ItemPedido;
 import com.redxela.dominio.Pedido;
 import com.redxela.dominio.TipoRecurso;
+import com.redxela.interbloqueo.SincronizadorConflicto;
 import com.redxela.recursos.GestorRecursos;
 import com.redxela.simulacion.RelojSimulacion;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Tarea de ejecución concurrente que procesa un pedido individual en su propio hilo.
@@ -28,11 +31,18 @@ public class ProcesadorPedido implements Runnable {
     private final Pedido pedido;
     private final GestorRecursos gestorRecursos;
     private final RelojSimulacion reloj;
+    private final SincronizadorConflicto sincronizador;
 
-    public ProcesadorPedido(Pedido pedido, GestorRecursos gestorRecursos, RelojSimulacion reloj) {
+    public ProcesadorPedido(
+            Pedido pedido,
+            GestorRecursos gestorRecursos,
+            RelojSimulacion reloj,
+            SincronizadorConflicto sincronizador
+    ) {
         this.pedido = pedido;
         this.gestorRecursos = gestorRecursos;
         this.reloj = reloj;
+        this.sincronizador = sincronizador;
     }
 
     @Override
@@ -45,9 +55,13 @@ public class ProcesadorPedido implements Runnable {
             List<TipoRecurso> requeridos = recopilarRecursosRequeridos();
             List<TipoRecurso> ordenados = gestorRecursos.determinarOrdenAdquisicion(requeridos);
 
-            // 2. Adquirir recursos paso a paso
+            // 2. Adquirir recursos paso a paso. La barrera del escenario de conflicto
+            //    solo actúa tras el primer recurso y únicamente en modo SIN_PREVENCION.
+            int adquiridos = 0;
             for (TipoRecurso recurso : ordenados) {
                 gestorRecursos.adquirirRecurso(pedido, recurso);
+                adquiridos++;
+                sincronizador.esperarTrasPrimerRecurso(pedido.getId(), adquiridos);
             }
 
             // 3. Ejecutar simulación de empaque y procesamiento
@@ -62,12 +76,19 @@ public class ProcesadorPedido implements Runnable {
         } catch (InterruptedException e) {
             // Manejo de expropiación (preemption): se restaura la bandera del hilo
             Thread.currentThread().interrupt();
-            if (pedido.getEstado() != EstadoPedido.COMPLETADO) {
-                pedido.setEstado(EstadoPedido.BLOQUEADO);
-            }
+            marcarComoBloqueado();
+        } catch (BrokenBarrierException | TimeoutException e) {
+            // La barrera del escenario no se completó: el pedido no puede continuar
+            marcarComoBloqueado();
         } finally {
             // Regla obligatoria: liberación garantizada de todo recurso en finally
             gestorRecursos.liberarTodos(pedido);
+        }
+    }
+
+    private void marcarComoBloqueado() {
+        if (pedido.getEstado() != EstadoPedido.COMPLETADO) {
+            pedido.setEstado(EstadoPedido.BLOQUEADO);
         }
     }
 
@@ -85,7 +106,7 @@ public class ProcesadorPedido implements Runnable {
         long pasoMs = Math.max(10L, duracionTotalMs / PASOS_PROGRESO);
 
         for (int i = 1; i <= PASOS_PROGRESO; i++) {
-            Thread.sleep(pasoMs);
+            reloj.pausarMilisegundos(pasoMs); // solo simula tiempo de trabajo, no sincroniza
             int porcentaje = (i * 100) / PASOS_PROGRESO;
             pedido.setProgreso(porcentaje);
         }

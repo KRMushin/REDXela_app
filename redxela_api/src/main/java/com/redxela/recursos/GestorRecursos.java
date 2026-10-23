@@ -95,4 +95,13 @@ public class GestorRecursos {
         }
         return Collections.unmodifiableList(estados);
     }
+
+    /**
+     * Devuelve todos los pools y el escáner a su capacidad inicial. Requiere que
+     * las tareas de pedidos hayan sido canceladas y esperadas previamente.
+     */
+    public void reiniciar() {
+        pools.values().forEach(PoolRecursos::reiniciar);
+        escaner.reiniciar();
+    }
 }

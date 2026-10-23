@@ -75,6 +75,9 @@ class Fase3AceptacionTest {
     @BeforeEach
     void setUp() throws InterruptedException {
         generadorPedidos.detener();
+        // Cancela tareas que hayan quedado vivas de la prueba anterior y espera
+        // a que su bloque finally devuelva los recursos al pool.
+        gestorProcesamiento.cancelarTodas();
         pedidoService.limpiarParaPruebas();
         relojSimulacion.setTimeScaleMs(30L); // Escala rápida por defecto
         Thread.sleep(100);
@@ -167,6 +170,9 @@ class Fase3AceptacionTest {
             future.get(2, TimeUnit.SECONDS);
         } catch (CancellationException | ExecutionException ignored) {
         }
+        // cancel(true) no espera al hilo: se confirma la salida real y la liberación
+        assertTrue(gestorProcesamiento.esperarFinalizacion("PED-INTERRUPT", 2000),
+                "El hilo interrumpido debió terminar su bloque finally");
 
         // Garantía RAII / finally: todos los recursos deben haber vuelto al pool
         assertTrue(pedido.getRecursosRetenidos().isEmpty());

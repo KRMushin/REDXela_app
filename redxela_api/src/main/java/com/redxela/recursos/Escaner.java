@@ -111,4 +111,15 @@ public class Escaner {
 
     public boolean estaEnUso() { return cerrojo.isLocked(); }
     public String getRetenedorActual() { return retenedorActual; }
+
+    /**
+     * Limpia la cola de espera si el escáner está libre. Si está retenido, el dueño
+     * actual lo liberará en su bloque finally y dejará el estado consistente.
+     */
+    public void reiniciar() {
+        if (!cerrojo.isLocked()) {
+            colaEspera.clear();
+            retenedorActual = null;
+        }
+    }
 }

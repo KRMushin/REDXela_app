@@ -89,12 +89,51 @@ public class PedidoService {
         despachador.despacharSiguiente(ahora).ifPresent(gestorProcesamiento::ejecutar);
     }
 
+    /**
+     * Un proceso terminado libera la CPU: se intenta despachar al siguiente.
+     * Los procesos expropiados no se atienden aquí; el resolutor los reencola.
+     */
+    public void despacharSiCompletado(String pedidoId) {
+        Pedido pedido = registroPedidos.get(pedidoId);
+        if (pedido == null || pedido.getEstado() == EstadoPedido.COMPLETADO) {
+            intentarDespachar();
+        }
+    }
+
     public Optional<Pedido> buscarPorId(String id) {
         return Optional.ofNullable(registroPedidos.get(id));
     }
 
     public List<Pedido> listarPedidos() {
         return new ArrayList<>(registroPedidos.values());
+    }
+
+    /**
+     * Registra un pedido ya construido (por ejemplo, los del escenario de conflicto)
+     * sin pasar por la reserva de stock. Se usa para inyección controlada de fallas.
+     */
+    public void registrarPedidoExistente(Pedido pedido) {
+        registroPedidos.put(pedido.getId(), pedido);
+        if (pedido.getEstado() == EstadoPedido.EN_ESPERA_STOCK) {
+            pedido.setEstado(EstadoPedido.EN_ESPERA_RECURSOS);
+        }
+    }
+
+    /**
+     * Devuelve un proceso expropiado a la cola de listos para que se atienda más adelante.
+     */
+    public boolean devolverAListaEspera(String pedidoId) {
+        Pedido pedido = registroPedidos.get(pedidoId);
+        if (pedido == null || pedido.getEstado() == EstadoPedido.COMPLETADO) {
+            return false;
+        }
+        pedidosEnEsperaStock.remove(pedidoId);
+        pedido.setProgreso(0);
+        pedido.setTInicio(null);
+        pedido.setTFin(null);
+        pedido.setRecursoEsperado(null);
+        listaEspera.agregar(pedido);
+        return true;
     }
 
     public int pedidosEnEsperaStock() {
@@ -105,5 +144,6 @@ public class PedidoService {
         registroPedidos.clear();
         listaEspera.vaciar();
         pedidosEnEsperaStock.clear();
+        secuencialPedido.set(100); // una simulación reiniciada vuelve a PED-101
     }
 }
