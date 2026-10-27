@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Métricas detalladas del centro de distribución expuestas para análisis.
  *
- * Concepto de SO: Contabilidad del sistema (Accounting) desagregada por clase de
+ * Contabilidad del sistema (Accounting) desagregada por clase de
  * prioridad y por recurso, sin modificar el snapshot de telemetría en vivo.
  */
 public record EstadisticasSistema(
@@ -19,7 +19,9 @@ public record EstadisticasSistema(
         double cumplimientoSlaPorcentaje,
         double tasaThroughputPorMinuto,
         List<MetricaNivel> porNivel,
-        List<OcupacionRecurso> ocupacionRecursos
+        List<OcupacionRecurso> ocupacionRecursos,
+        long pedidosEnEsperaStock,
+        long pedidosEnEsperaRecursos
 ) {
 
     public record MetricaNivel(

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Controlador REST para el alta manual y consulta de pedidos en el centro de distribución.
  * 
- * Concepto de SO: Llamada al sistema para creación de nuevos procesos (fork / exec / CreateProcess Syscall).
+ * Llamada al sistema para creación de nuevos procesos (fork / exec / CreateProcess Syscall).
  */
 @RestController
 @RequestMapping("/api/pedidos")

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Controlador REST para supervisar y operar el generador de carga del sistema.
  * 
- * Concepto de SO: Interfaz de Inyección de Carga y Calibración del Sistema (Benchmark / Stress Test Controller).
+ * Interfaz de Inyección de Carga y Calibración del Sistema (Benchmark / Stress Test Controller).
  */
 @RestController
 @RequestMapping("/api/simulacion/generador")

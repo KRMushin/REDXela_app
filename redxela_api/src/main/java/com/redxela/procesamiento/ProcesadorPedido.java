@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 /**
  * Tarea de ejecución concurrente que procesa un pedido individual en su propio hilo.
@@ -32,6 +33,7 @@ public class ProcesadorPedido implements Runnable {
     private final GestorRecursos gestorRecursos;
     private final RelojSimulacion reloj;
     private final SincronizadorConflicto sincronizador;
+    private final Consumer<Pedido> alCompletar;
 
     public ProcesadorPedido(
             Pedido pedido,
@@ -39,20 +41,23 @@ public class ProcesadorPedido implements Runnable {
             RelojSimulacion reloj,
             SincronizadorConflicto sincronizador
     ) {
+        this(pedido, gestorRecursos, reloj, sincronizador, p -> {});
+    }
+
+    public ProcesadorPedido(Pedido pedido, GestorRecursos gestorRecursos, RelojSimulacion reloj,
+                            SincronizadorConflicto sincronizador, Consumer<Pedido> alCompletar) {
         this.pedido = pedido;
         this.gestorRecursos = gestorRecursos;
         this.reloj = reloj;
         this.sincronizador = sincronizador;
+        this.alCompletar = alCompletar;
     }
 
     @Override
     public void run() {
-        if (pedido.getTInicio() == null) {
-            pedido.setTInicio(System.currentTimeMillis());
-        }
         try {
             // 1. Identificar recursos requeridos por los artículos del pedido
-            List<TipoRecurso> requeridos = recopilarRecursosRequeridos();
+            List<TipoRecurso> requeridos = recopilarRecursosRequeridos(pedido);
             List<TipoRecurso> ordenados = gestorRecursos.determinarOrdenAdquisicion(requeridos);
 
             // 2. Adquirir recursos paso a paso. La barrera del escenario de conflicto
@@ -65,8 +70,10 @@ public class ProcesadorPedido implements Runnable {
             }
 
             // 3. Ejecutar simulación de empaque y procesamiento
+            pedido.setTInicio(System.currentTimeMillis());
             pedido.setEstado(EstadoPedido.EN_PROCESO);
             ejecutarTrabajo();
+            alCompletar.accept(pedido);
 
             // 4. Finalización exitosa
             pedido.setProgreso(100);
@@ -92,7 +99,7 @@ public class ProcesadorPedido implements Runnable {
         }
     }
 
-    private List<TipoRecurso> recopilarRecursosRequeridos() {
+    public static List<TipoRecurso> recopilarRecursosRequeridos(Pedido pedido) {
         Set<TipoRecurso> set = new LinkedHashSet<>();
         for (ItemPedido item : pedido.getItems()) {
             set.addAll(item.tipoMercancia().getRecursosRequeridos());

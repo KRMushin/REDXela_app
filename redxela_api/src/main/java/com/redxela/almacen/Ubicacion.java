@@ -2,13 +2,8 @@ package com.redxela.almacen;
 
 /**
  * Celda física elemental de almacenamiento en el centro de distribución.
- * 
- * Concepto de SO: Marco de Página / Bloque de Almacenamiento Secundario (Page Frame / Disk Block).
+ * Marco de Página / Bloque de Almacenamiento Secundario (Page Frame / Disk Block).
  * Unidad de asignación de tamaño fijo identificada por coordenadas discretas (pasillo, nivel, posición).
- * 
- * Concurrencia: esta clase no usa cerrojos propios. Su estado se modifica únicamente
- * mientras se retiene el ReentrantReadWriteLock de {@link Almacen}, de modo que la
- * exclusión mutua queda centralizada en un solo punto (menos cerrojos, menos deadlocks).
  */
 public class Ubicacion {
 
@@ -58,6 +53,16 @@ public class Ubicacion {
             this.unidadesOcupadas += aGuardar;
         }
         return aGuardar;
+    }
+
+    public int retirar(int cantidad) {
+        int retiradas = Math.min(unidadesOcupadas, cantidad);
+        unidadesOcupadas -= retiradas;
+        if (unidadesOcupadas == 0) {
+            productoId = null;
+            loteId = null;
+        }
+        return retiradas;
     }
 
     public void vaciar() {

@@ -36,7 +36,7 @@ public record Lote(
     }
 
     public int unidadesAlmacenadas() {
-        return cantidadRecibida - unidadesPendientes;
+        return ubicaciones.stream().mapToInt(AsignacionCelda::unidades).sum();
     }
 
     public boolean quedoPendiente() {

@@ -2,6 +2,7 @@ package com.redxela.api;
 
 import com.redxela.api.dto.CambiarPoliticaRequest;
 import com.redxela.api.dto.PoliticaResponse;
+import com.redxela.dominio.PedidoService;
 import com.redxela.planificacion.Despachador;
 import com.redxela.planificacion.ElementoListaEspera;
 import com.redxela.planificacion.TipoPolitica;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Controlador REST para la gestión de políticas de planificación y cola de espera.
  * 
- * Concepto de SO: Interfaz de Llamadas al Sistema / Interfaz Administrativa del Kernel (Syscall/ProcFS).
+ * Interfaz de Llamadas al Sistema / Interfaz Administrativa del Kernel (Syscall/ProcFS).
  * Permite al administrador inspeccionar la Ready Queue e intercambiar el algoritmo de planificación
  * del sistema en caliente sin reiniciar los procesos.
  */
@@ -23,9 +24,11 @@ import java.util.List;
 public class PlanificacionController {
 
     private final Despachador despachador;
+    private final PedidoService pedidos;
 
-    public PlanificacionController(Despachador despachador) {
+    public PlanificacionController(Despachador despachador, PedidoService pedidos) {
         this.despachador = despachador;
+        this.pedidos = pedidos;
     }
 
     @GetMapping("/politica")
@@ -41,6 +44,7 @@ public class PlanificacionController {
     @PutMapping("/politica")
     public ResponseEntity<PoliticaResponse> cambiarPolitica(@Valid @RequestBody CambiarPoliticaRequest request) {
         despachador.cambiarPolitica(request.politica());
+        pedidos.intentarDespachar();
         return ResponseEntity.ok(new PoliticaResponse(
                 request.politica(),
                 request.politica().getNombreLegible(),

@@ -2,7 +2,7 @@ function PedidosPage() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2 className="page-title">📋 Pedidos</h2>
+        <h2 className="page-title">Pedidos</h2>
         <p className="page-subtitle">Recepción y procesamiento de pedidos de clientes.</p>
       </div>
       <div className="pending-notice">

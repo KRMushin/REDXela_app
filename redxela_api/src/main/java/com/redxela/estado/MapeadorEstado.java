@@ -12,7 +12,10 @@ import com.redxela.recursos.EstadoRecurso;
 import com.redxela.recursos.GestorRecursos;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.List;
 
 /**
@@ -104,9 +107,21 @@ public class MapeadorEstado {
     }
 
     List<SnapshotEstado.ElementoEspera> listaEspera(long ahora) {
-        return despachador.obtenerVistaListaEspera(ahora).stream()
-                .map(this::elementoEspera)
-                .toList();
+        List<SnapshotEstado.ElementoEspera> resultado = new ArrayList<>(despachador.obtenerVistaListaEspera(ahora)
+                .stream().map(this::elementoEspera).toList());
+        Set<String> visibles = resultado.stream().map(SnapshotEstado.ElementoEspera::id).collect(Collectors.toSet());
+        pedidos.listarPedidos().stream()
+                .filter(p -> p.getEstado() == EstadoPedido.EN_ESPERA_STOCK
+                        || (p.getEstado() == EstadoPedido.EN_ESPERA_RECURSOS && !visibles.contains(p.getId())))
+                .sorted(Comparator.comparingLong(Pedido::getTCreacion).thenComparing(Pedido::getId))
+                .forEach(p -> resultado.add(new SnapshotEstado.ElementoEspera(
+                        p.getId(), p.getCliente().nombre(), p.getNivel(), p.getTotalArticulos(), p.getEstado(),
+                        p.getTCreacion(), ServicioEstadisticas.redondear((ahora - p.getTCreacion())
+                                / (double) p.getEscalaTiempoMs()),
+                        ServicioEstadisticas.redondear(despachador.getPoliticaActiva().calcularPrioridadEfectiva(p, ahora)),
+                        p.getEstado() == EstadoPedido.EN_ESPERA_STOCK ? "Esperando disponibilidad de productos"
+                                : "Adquiriendo recursos")));
+        return List.copyOf(resultado);
     }
 
     private SnapshotEstado.ElementoEspera elementoEspera(ElementoListaEspera elemento) {

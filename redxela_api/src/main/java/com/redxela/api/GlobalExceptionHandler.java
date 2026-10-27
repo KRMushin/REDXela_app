@@ -12,8 +12,7 @@ import java.util.Map;
 
 /**
  * Manejador global de excepciones de la API REST.
- * 
- * Concepto de SO: Manejo centralizado de fallas del sistema (trap/exception handler):
+ * Manejo centralizado de fallas del sistema (trap/exception handler):
  * traduce errores de asignación de recursos y de validación a códigos de estado HTTP
  * sin filtrar detalles internos al cliente.
  */

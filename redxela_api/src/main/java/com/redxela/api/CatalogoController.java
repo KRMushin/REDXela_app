@@ -12,8 +12,7 @@ import java.util.List;
 
 /**
  * Controlador REST del catálogo fijo de productos.
- *
- * Concepto de SO: Tabla de descriptores estáticos (Static Inode/File Table).
+ * Tabla de descriptores estáticos (Static Inode/File Table).
  * Solo lectura: los productos existen desde el arranque y no cambian en caliente.
  */
 @RestController

@@ -2,7 +2,7 @@ function PlanificacionPage() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2 className="page-title">📅 Planificación</h2>
+        <h2 className="page-title">Planificación</h2>
         <p className="page-subtitle">Algoritmos de planificación de procesos del simulador.</p>
       </div>
       <div className="pending-notice">

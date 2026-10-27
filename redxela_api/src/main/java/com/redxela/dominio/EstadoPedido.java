@@ -3,7 +3,7 @@ package com.redxela.dominio;
 /**
  * Estados del ciclo de vida de un pedido en la simulación.
  * 
- * Concepto de SO: Modelo de estados de un proceso (New, Ready, Running, Waiting/Blocked, Terminated).
+ * Modelo de estados de un proceso (New, Ready, Running, Waiting/Blocked, Terminated).
  * Representa la transición de un proceso a través de los planificadores del sistema operativo.
  */
 public enum EstadoPedido {

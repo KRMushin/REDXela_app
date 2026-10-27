@@ -69,7 +69,7 @@ public class ListaEspera {
         List<ElementoListaEspera> resultado = new ArrayList<>(ordenados.size());
         for (int i = 0; i < ordenados.size(); i++) {
             Pedido p = ordenados.get(i);
-            double esperaMin = Math.max(0.0, (tiempoActualMs - p.getTCreacion()) / 60000.0);
+            double esperaMin = Math.max(0.0, (tiempoActualMs - p.getTCreacion()) / (double) p.getEscalaTiempoMs());
             double prioridad = politica.calcularPrioridadEfectiva(p, tiempoActualMs);
             String motivo = politica.explicarPrioridad(p, tiempoActualMs);
 

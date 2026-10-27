@@ -2,6 +2,7 @@ package com.redxela.procesamiento;
 
 import com.redxela.dominio.Pedido;
 import com.redxela.interbloqueo.SincronizadorConflicto;
+import com.redxela.inventario.ServicioInventario;
 import com.redxela.recursos.GestorRecursos;
 import com.redxela.simulacion.RelojSimulacion;
 import jakarta.annotation.PreDestroy;
@@ -30,6 +31,7 @@ public class GestorProcesamiento {
     private final RelojSimulacion reloj;
     private final SincronizadorConflicto sincronizador;
     private final ApplicationEventPublisher eventos;
+    private final ServicioInventario inventario;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private final Map<String, TareaActiva> tareasActivas = new ConcurrentHashMap<>();
 
@@ -37,32 +39,36 @@ public class GestorProcesamiento {
             GestorRecursos gestorRecursos,
             RelojSimulacion reloj,
             SincronizadorConflicto sincronizador,
-            ApplicationEventPublisher eventos
+            ApplicationEventPublisher eventos,
+            ServicioInventario inventario
     ) {
         this.gestorRecursos = gestorRecursos;
         this.reloj = reloj;
         this.sincronizador = sincronizador;
         this.eventos = eventos;
+        this.inventario = inventario;
     }
 
     public Future<?> ejecutar(Pedido pedido) {
-        ProcesadorPedido procesador = new ProcesadorPedido(pedido, gestorRecursos, reloj, sincronizador);
+        ProcesadorPedido procesador = new ProcesadorPedido(pedido, gestorRecursos, reloj, sincronizador, inventario::despachar);
         CountDownLatch finalizada = new CountDownLatch(1);
 
         FutureTask<Void> tarea = new FutureTask<>(() -> {
-            try {
-                procesador.run();
-            } finally {
-                tareasActivas.remove(pedido.getId());
-                finalizada.countDown(); // el finally de ProcesadorPedido ya liberó recursos
-                eventos.publishEvent(new PedidoFinalizadoEvent(pedido.getId()));
-            }
+            procesador.run();
             return null;
         });
 
         // Se registra antes de arrancar para evitar la carrera de terminación inmediata
         tareasActivas.put(pedido.getId(), new TareaActiva(tarea, finalizada));
-        threadPool.execute(tarea);
+        threadPool.execute(() -> {
+            try {
+                tarea.run();
+            } finally {
+                tareasActivas.remove(pedido.getId());
+                finalizada.countDown(); // el finally de ProcesadorPedido ya liberó recursos
+                eventos.publishEvent(new PedidoFinalizadoEvent(pedido.getId()));
+            }
+        });
         return tarea;
     }
 

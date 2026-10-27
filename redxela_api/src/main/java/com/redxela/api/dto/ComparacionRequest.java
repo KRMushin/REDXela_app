@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 /**
  * Parámetros opcionales para lanzar la comparación de políticas.
  *
- * Concepto de SO: Semilla del generador de carga sintética (reproducibility seed)
+ * Semilla del generador de carga sintética (reproducibility seed)
  * y tamaño del lote de procesos a comparar.
  */
 public record ComparacionRequest(

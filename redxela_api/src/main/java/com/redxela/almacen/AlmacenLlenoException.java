@@ -2,8 +2,7 @@ package com.redxela.almacen;
 
 /**
  * Excepción lanzada cuando el almacén no dispone de celdas libres suficientes.
- * 
- * Concepto de SO: Fallo de Asignación de Memoria / Espacio en Disco Insuficiente (Out Of Memory / ENOSPC).
+ * Fallo de Asignación de Memoria / Espacio en Disco Insuficiente (Out Of Memory / ENOSPC).
  */
 public class AlmacenLlenoException extends RuntimeException {
 

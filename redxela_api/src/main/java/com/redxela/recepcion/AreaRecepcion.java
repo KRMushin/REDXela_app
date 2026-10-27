@@ -5,6 +5,7 @@ import com.redxela.dominio.CatalogoProductos;
 import com.redxela.recursos.Escaner;
 import com.redxela.simulacion.RelojSimulacion;
 import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -30,13 +31,15 @@ public class AreaRecepcion {
     private final Escaner escaner;
     private final RelojSimulacion reloj;
     private final CatalogoProductos catalogo;
+    private final ApplicationEventPublisher eventos;
     private final AtomicInteger secuencialLote = new AtomicInteger();
 
     public AreaRecepcion(
             SimulacionProperties properties,
             Escaner escaner,
             RelojSimulacion reloj,
-            CatalogoProductos catalogo
+            CatalogoProductos catalogo,
+            ApplicationEventPublisher eventos
     ) {
         int configurada = properties.capacidadColaRecepcion() > 0
                 ? properties.capacidadColaRecepcion()
@@ -47,6 +50,7 @@ public class AreaRecepcion {
         this.escaner = escaner;
         this.reloj = reloj;
         this.catalogo = catalogo;
+        this.eventos = eventos;
     }
 
     /**
@@ -68,6 +72,7 @@ public class AreaRecepcion {
             reloj.pausarSimulado(MINUTOS_ESCANEO); // simula la descarga y lectura del código
         } finally {
             escaner.liberarPorRecepcion(); // liberación garantizada incluso ante interrupción
+            eventos.publishEvent(escaner);
         }
 
         // Contrapresión: si el inventario va más lento, el productor espera aquí.

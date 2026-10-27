@@ -2,7 +2,7 @@ function InventarioPage() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2 className="page-title">📦 Inventario</h2>
+        <h2 className="page-title">Inventario</h2>
         <p className="page-subtitle">Control de existencias en el centro de distribución.</p>
       </div>
       <div className="pending-notice">

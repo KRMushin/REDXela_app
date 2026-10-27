@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Calcula las métricas de desempeño globales y desagregadas del centro de distribución.
  *
- * Concepto de SO: Contabilidad de tiempos de CPU y cumplimiento de plazos
+ * Contabilidad de tiempos de CPU y cumplimiento de plazos
  * (Accounting / Soft Real-Time SLA). Compara el ciclo de vida de cada proceso
  * con el objetivo de su clase de prioridad y reporta la ocupación de recursos.
  */
@@ -50,7 +50,9 @@ public class ServicioEstadisticas {
                 redondear(promedio(completados, this::esperaMinutos)),
                 redondear(promedio(completados, this::procesamientoMinutos)),
                 redondear(porcentaje(dentroSla, total)),
-                redondear(transcurrido > 0 ? total / transcurrido : 0)
+                redondear(transcurrido > 0 ? total / transcurrido : 0),
+                contarEnEstado(EstadoPedido.EN_ESPERA_STOCK),
+                contarEnEstado(EstadoPedido.EN_ESPERA_RECURSOS)
         );
     }
 
@@ -69,8 +71,14 @@ public class ServicioEstadisticas {
                 redondear(porcentaje(dentroSla, total)),
                 redondear(transcurrido > 0 ? total / transcurrido : 0),
                 metricasPorNivel(completados),
-                ocupacionRecursos()
+                ocupacionRecursos(),
+                contarEnEstado(EstadoPedido.EN_ESPERA_STOCK),
+                contarEnEstado(EstadoPedido.EN_ESPERA_RECURSOS)
         );
+    }
+
+    private long contarEnEstado(EstadoPedido estado) {
+        return pedidoService.listarPedidos().stream().filter(p -> p.getEstado() == estado).count();
     }
 
     private List<Pedido> completados() {
@@ -122,16 +130,15 @@ public class ServicioEstadisticas {
     }
 
     private double esperaMinutos(Pedido pedido) {
-        return reloj.convertirMsRealesAMinutosSimulados(pedido.getTInicio() - pedido.getTCreacion());
+        return (pedido.getTInicio() - pedido.getTCreacion()) / (double) pedido.getEscalaTiempoMs();
     }
 
     private double procesamientoMinutos(Pedido pedido) {
-        return reloj.convertirMsRealesAMinutosSimulados(pedido.getTFin() - pedido.getTInicio());
+        return (pedido.getTFin() - pedido.getTInicio()) / (double) pedido.getEscalaTiempoMs();
     }
 
     private boolean cumpleSla(Pedido pedido) {
-        double ciclo = reloj.convertirMsRealesAMinutosSimulados(pedido.getTFin() - pedido.getTCreacion());
-        return ciclo <= pedido.getNivel().getTiempoObjetivoMinutos();
+        return esperaMinutos(pedido) <= pedido.getNivel().getTiempoObjetivoMinutos();
     }
 
     private double promedio(List<Pedido> pedidos, java.util.function.ToDoubleFunction<Pedido> metrica) {

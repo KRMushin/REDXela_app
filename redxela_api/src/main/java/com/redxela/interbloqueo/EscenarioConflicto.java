@@ -23,7 +23,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * Escenario controlado que provoca deliberadamente un interbloqueo.
  * 
- * Concepto de SO: Inyección de fallas para demostrar la condición de espera circular
+ * Inyección de fallas para demostrar la condición de espera circular
  * de Coffman. Tres pedidos Pesados retienen todos los montacargas y dos Voluminosos
  * retienen todas las áreas de carga; la barrera garantiza que ambos grupos ya tengan
  * su primer recurso antes de pedir el segundo, en orden inverso.

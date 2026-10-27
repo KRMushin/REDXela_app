@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Controlador REST del área de Recepción de mercadería.
  * 
- * Concepto de SO: Llamada al sistema de entrada/salida (write syscall): el cliente
+ * Llamada al sistema de entrada/salida (write syscall): el cliente
  * entrega un lote y el mensaje queda encolado para que el consumidor de Inventario
  * lo procese de forma asíncrona (respuesta 202 Accepted).
  */

@@ -12,8 +12,7 @@ import java.util.List;
 
 /**
  * Controlador REST para el alta y consulta de clientes y sus niveles de prioridad.
- * 
- * Concepto de SO: Llamada al sistema de creación de usuarios/procesos padre (User Management Syscall).
+ * Llamada al sistema de creación de usuarios/procesos padre (User Management Syscall).
  */
 @RestController
 @RequestMapping("/api/clientes")

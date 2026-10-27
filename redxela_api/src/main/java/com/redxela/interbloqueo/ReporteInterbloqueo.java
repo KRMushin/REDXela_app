@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Reporte del estado de interbloqueo del sistema.
  * 
- * Concepto de SO: Diagnóstico de interbloqueo (deadlock report): identifica los
+ * Diagnóstico de interbloqueo (deadlock report): identifica los
  * procesos involucrados, los recursos en disputa y la explicación de la espera circular.
  */
 public record ReporteInterbloqueo(

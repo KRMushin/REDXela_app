@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Controlador REST para reiniciar la simulación completa.
  *
- * Concepto de SO: Llamada administrativa de reinicio (reboot syscall). Devuelve
+ * Llamada administrativa de reinicio (reboot syscall). Devuelve
  * el sistema a su estado inicial sin terminar el proceso de la aplicación.
  */
 @RestController

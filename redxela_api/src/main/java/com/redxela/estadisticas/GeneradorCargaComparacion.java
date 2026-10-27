@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  * Genera una carga sintética reproducible para comparar políticas de planificación.
  *
- * Concepto de SO: Carga de trabajo sintética con semilla fija (Deterministic Workload).
+ * Carga de trabajo sintética con semilla fija (Deterministic Workload).
  * La misma secuencia de llegadas, niveles y ráfagas se reutiliza bajo cada algoritmo,
  * garantizando que las diferencias observadas provengan solo del planificador.
  */

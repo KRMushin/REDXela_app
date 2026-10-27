@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Clasificación de la mercancía con la secuencia de recursos requeridos para su procesamiento.
  * 
- * Concepto de SO: Grafo de solicitud y asignación de recursos (RAG).
+ * Grafo de solicitud y asignación de recursos (RAG).
  * Define el orden cronológico natural de solicitud de recursos. La divergencia de orden
  * entre 'Pesado' (Montacargas -> Área de carga) y 'Voluminoso' (Área de carga -> Montacargas)
  * introduce deliberadamente la condición de espera circular para interbloqueos.

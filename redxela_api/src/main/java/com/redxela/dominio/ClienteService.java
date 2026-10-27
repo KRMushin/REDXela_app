@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Servicio para la administración y registro de clientes y sus niveles de prioridad.
  * 
- * Concepto de SO: Gestión de Cuentas de Usuario y Clases de Prioridad (User Accounts & Niceness).
+ * Gestión de Cuentas de Usuario y Clases de Prioridad (User Accounts & Niceness).
  * Registra los usuarios del sistema asignando sus correspondientes niveles de prioridad de servicio.
  */
 @Service
 public class ClienteService {
 
     private final Map<String, Cliente> clientes = new ConcurrentHashMap<>();
-    private final AtomicInteger secuencialId = new AtomicInteger(1);
+    private final AtomicInteger secuencialId = new AtomicInteger(5);
 
     public ClienteService() {
         // Clientes iniciales para cada uno de los 5 niveles de servicio
@@ -30,7 +30,10 @@ public class ClienteService {
     public Cliente crearCliente(String nombre, NivelServicio nivel) {
         String id = String.format("CLI-%02d", secuencialId.incrementAndGet());
         Cliente cliente = new Cliente(id, nombre, nivel);
-        registrarCliente(cliente);
+        while (clientes.putIfAbsent(cliente.id(), cliente) != null) {
+            id = String.format("CLI-%02d", secuencialId.incrementAndGet());
+            cliente = new Cliente(id, nombre, nivel);
+        }
         return cliente;
     }
 

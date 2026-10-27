@@ -3,7 +3,7 @@ package com.redxela.dominio;
 /**
  * Recursos compartidos finitos del centro de distribución REDXela.
  * 
- * Concepto de SO: Recursos del sistema gestionados por el kernel (unidades finitas de CPU,
+ * Recursos del sistema gestionados por el kernel (unidades finitas de CPU,
  * dispositivos de E/S, canales DMA). Cada recurso tiene un rango global para prevención
  * de interbloqueos mediante jerarquía de recursos (condición de espera circular de Coffman/Havender).
  */

@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Lanza y consulta la comparación de políticas de planificación.
- *
- * Concepto de SO: Interfaz administrativa de benchmark (scheduler benchmark syscall).
+ * Interfaz administrativa de benchmark (scheduler benchmark syscall).
  * La ejecución ocurre sobre una réplica aislada y no modifica la simulación en vivo.
  */
 @RestController

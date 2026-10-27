@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Propiedades de configuración de la simulación del centro de distribución REDXela.
  * 
- * Concepto de SO: Parámetros del sistema operativo (tabla de límites del kernel)
+ * Parámetros del sistema operativo (tabla de límites del kernel)
  * que definen la cantidad finita de recursos del sistema, el tamaño de los búferes
  * de comunicación y la tasa de llegada de procesos.
  */

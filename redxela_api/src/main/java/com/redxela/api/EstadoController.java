@@ -10,8 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
  * Expone el snapshot de estado por SSE y por polling de respaldo.
- *
- * Concepto de SO: Canal de telemetría del sistema (procfs / dmesg). El stream SSE
+ * Canal de telemetría del sistema (procfs / dmesg). El stream SSE
  * empuja el estado a los observadores y el endpoint REST ofrece la misma foto
  * bajo demanda para clientes que no soportan eventos.
  */

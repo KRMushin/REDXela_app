@@ -9,16 +9,6 @@ import java.util.Optional;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-/**
- * Representación del espacio físico de almacenamiento del centro de distribución.
- * 
- * Concepto de SO: Espacio de Direccionamiento Físico de Memoria / Disco Físico (Physical Address Space).
- * Conjunto estructurado de celdas homogéneas donde se distribuyen los lotes entrantes.
- * 
- * Concurrencia: ReentrantReadWriteLock justo. Varios hilos pueden consultar el estado
- * en paralelo (lectores), pero la asignación de celdas es exclusiva (escritor), evitando
- * que dos lotes reciban la misma ubicación.
- */
 @Component
 public class Almacen {
 

@@ -191,9 +191,11 @@ export function crearSnapshotSimulado(): SnapshotEstado {
     },
     estadisticas: {
       pedidosCompletados: 45,
+      pedidosEnEsperaStock: 1,
+      pedidosEnEsperaRecursos: 3,
       tiempoEsperaPromedioMinutos: 6.4,
       tiempoProcesamientoPromedioMinutos: 12.1,
-      cumplimientoSlaPorcentaje: 93.3,
+      cumplimientoSlaPorcentaje: 82.2,
       tasaThroughputPorMinuto: 3.2,
     },
   };

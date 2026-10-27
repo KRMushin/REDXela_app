@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Punto de sincronización para que el escenario de conflicto sea determinista.
  * 
- * Concepto de SO: Barrera de sincronización (CyclicBarrier). Obliga a que todos los
+ * Barrera de sincronización (CyclicBarrier). Obliga a que todos los
  * procesos del escenario hayan adquirido su primer recurso antes de que cualquiera
  * intente el segundo; así la espera circular se produce siempre, no por casualidad.
  * La barrera solo se activa en modo SIN_PREVENCION; con prevención se omite.

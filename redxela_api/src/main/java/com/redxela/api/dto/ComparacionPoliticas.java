@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Tabla comparativa de las políticas de planificación bajo una carga idéntica.
  *
- * Concepto de SO: Comparación de algoritmos de planificación (Scheduler Benchmark)
+ * Comparación de algoritmos de planificación (Scheduler Benchmark)
  * ejecutada sobre una réplica aislada del sistema, sin alterar la simulación viva.
  */
 public record ComparacionPoliticas(

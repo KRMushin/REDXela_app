@@ -78,3 +78,13 @@ export const reiniciarSimulacion = () => solicitar('/simulacion/reiniciar', { me
 
 /** Respaldo del stream cuando el navegador no soporta EventSource. */
 export const obtenerSnapshot = () => solicitar('/estado/snapshot');
+
+/** Métricas detalladas por nivel y por recurso. */
+export const obtenerEstadisticas = () => solicitar('/estadisticas');
+
+/** Lanza la comparación aislada de las tres políticas. */
+export const compararPoliticas = (datos = {}) =>
+  enviarJson('/comparador/politicas', 'POST', datos);
+
+/** Recupera el último resultado de comparación disponible. */
+export const obtenerUltimaComparacion = () => solicitar('/comparador/politicas');

@@ -36,7 +36,7 @@ public class PrioridadConEnvejecimiento implements PoliticaPlanificacion {
         long objetivoMinutos = pedido.getNivel().getTiempoObjetivoMinutos();
 
         // Conversión de tiempo de espera a minutos reales o simulados
-        double esperaMinutos = Math.max(0.0, (tiempoActualMs - pedido.getTCreacion()) / 60000.0);
+        double esperaMinutos = Math.max(0.0, (tiempoActualMs - pedido.getTCreacion()) / (double) pedido.getEscalaTiempoMs());
         double denominadorObjetivo = (objetivoMinutos <= 0) ? 1.0 : (double) objetivoMinutos;
 
         // La relación espera/objetivo reduce el valor numérico (aumenta su prioridad)
@@ -47,7 +47,7 @@ public class PrioridadConEnvejecimiento implements PoliticaPlanificacion {
     @Override
     public String explicarPrioridad(Pedido pedido, long tiempoActualMs) {
         double pEfectiva = calcularPrioridadEfectiva(pedido, tiempoActualMs);
-        double esperaMin = Math.max(0.0, (tiempoActualMs - pedido.getTCreacion()) / 60000.0);
+        double esperaMin = Math.max(0.0, (tiempoActualMs - pedido.getTCreacion()) / (double) pedido.getEscalaTiempoMs());
         return String.format(
                 "Prioridad efectiva: %.2f (Nivel %s, Espera: %.1f min / SLA: %d min)",
                 pEfectiva,

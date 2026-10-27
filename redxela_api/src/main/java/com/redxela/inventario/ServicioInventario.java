@@ -6,6 +6,9 @@ import com.redxela.almacen.ResultadoAsignacion;
 import com.redxela.config.SimulacionProperties;
 import com.redxela.dominio.CatalogoProductos;
 import com.redxela.dominio.Producto;
+import com.redxela.dominio.Pedido;
+import com.redxela.dominio.ItemPedido;
+import java.util.HashMap;
 import com.redxela.recepcion.MensajeLlegada;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,8 +121,21 @@ public class ServicioInventario {
         return deposito.snapshot();
     }
 
+    public void despachar(Pedido pedido) {
+        if (!pedido.isStockReservado()) return;
+        Map<String, Integer> cantidades = new HashMap<>();
+        for (ItemPedido item : pedido.getItems()) {
+            cantidades.merge(item.producto().id(), item.cantidad(), Integer::sum);
+        }
+        asignador.retirarProductos(cantidades);
+        pedido.setStockReservado(false);
+    }
+
     public Map<String, Lote> lotes() {
-        return Map.copyOf(lotes);
+        Map<String, Lote> actuales = new HashMap<>();
+        lotes.forEach((id, lote) -> actuales.put(id, new Lote(id, lote.productoId(), lote.cantidadRecibida(),
+                lote.unidadesPendientes(), asignador.consultarUbicacionesLote(id), lote.tRegistro())));
+        return Map.copyOf(actuales);
     }
 
     public int unidadesPendientesTotales() {

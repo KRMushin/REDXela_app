@@ -3,7 +3,7 @@ package com.redxela.dominio;
 /**
  * Representa al usuario o entidad que solicita pedidos al centro de distribución.
  * 
- * Concepto de SO: Identificador de usuario/propietario del proceso (UID), que define
+ * Identificador de usuario/propietario del proceso (UID), que define
  * la clase de prioridad y el privilegio de atención asignado por el planificador del sistema.
  */
 public record Cliente(

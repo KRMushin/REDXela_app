@@ -15,7 +15,7 @@ function ListaEsperaPanel({ elementos, politica }: ListaEsperaPanelProps) {
     <section className="panel">
       <EncabezadoPanel
         titulo="Lista de espera"
-        descripcion="Orden actual de la cola de listos y motivo de la posición asignada."
+        descripcion="Pedidos listos por orden de atención y pedidos pendientes de stock o recursos."
         extra={<span className="contador">{ETIQUETAS_POLITICA[politica]}</span>}
       />
       {elementos.length === 0 ? (

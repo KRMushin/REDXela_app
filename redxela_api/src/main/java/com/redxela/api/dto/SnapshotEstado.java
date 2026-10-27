@@ -11,8 +11,7 @@ import java.util.List;
 
 /**
  * Snapshot completo del estado del centro de distribución para la interfaz en vivo.
- *
- * Concepto de SO: Instantánea coherente del estado del sistema (System State Snapshot),
+ * Instantánea coherente del estado del sistema (System State Snapshot),
  * equivalente a leer /proc en Linux: procesos, recursos, memoria física, colas y métricas
  * en un único documento consistente para observabilidad.
  */
@@ -108,6 +107,8 @@ public record SnapshotEstado(
             double tiempoEsperaPromedioMinutos,
             double tiempoProcesamientoPromedioMinutos,
             double cumplimientoSlaPorcentaje,
-            double tasaThroughputPorMinuto
+            double tasaThroughputPorMinuto,
+            long pedidosEnEsperaStock,
+            long pedidosEnEsperaRecursos
     ) {}
 }

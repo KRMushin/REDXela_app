@@ -3,7 +3,7 @@ package com.redxela.dominio;
 /**
  * Representación de un producto en el catálogo del centro de distribución.
  * 
- * Concepto de SO: Identificador de tipo de tarea o dato dentro del sistema de archivos o memoria.
+ * Identificador de tipo de tarea o dato dentro del sistema de archivos o memoria.
  * Cada producto está invariablemente ligado a un tipo de mercancía y su perfil de consumo de recursos.
  */
 public record Producto(

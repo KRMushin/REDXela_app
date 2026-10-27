@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Expone las métricas detalladas del centro de distribución.
- *
- * Concepto de SO: Lectura de contabilidad del sistema (procfs de métricas) sin
+ * Lectura de contabilidad del sistema (procfs de métricas) sin
  * alterar el snapshot periódico que consume el tablero en vivo.
  */
 @RestController

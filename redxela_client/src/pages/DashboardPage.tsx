@@ -9,6 +9,7 @@ import FormulariosPanel from '../components/tablero/FormulariosPanel';
 import AlmacenPanel from '../components/tablero/AlmacenPanel';
 import ConflictoPanel from '../components/tablero/ConflictoPanel';
 import ControlesPanel from '../components/tablero/ControlesPanel';
+import ComparadorPanel from '../components/tablero/ComparadorPanel';
 import { ETIQUETAS_MODO, ETIQUETAS_POLITICA, formatearHora, formatearMinutos } from '../utils/formato';
 
 interface DashboardPageProps {
@@ -18,14 +19,15 @@ interface DashboardPageProps {
 }
 
 const TABS = [
-  { id: 'recursos', etiqueta: 'Recursos', icono: '⚙️' },
-  { id: 'pedidos', etiqueta: 'Pedidos', icono: '📋' },
-  { id: 'espera', etiqueta: 'Lista de espera', icono: '⏳' },
-  { id: 'estadisticas', etiqueta: 'Estadísticas', icono: '📊' },
-  { id: 'almacen', etiqueta: 'Almacén', icono: '📦' },
-  { id: 'formularios', etiqueta: 'Formularios', icono: '📝' },
-  { id: 'conflicto', etiqueta: 'Conflicto', icono: '🔒' },
-  { id: 'controles', etiqueta: 'Controles', icono: '🎛️' },
+  { id: 'recursos', etiqueta: 'Recursos' },
+  { id: 'pedidos', etiqueta: 'Pedidos' },
+  { id: 'espera', etiqueta: 'Lista de espera' },
+  { id: 'estadisticas', etiqueta: 'Estadísticas' },
+  { id: 'comparador', etiqueta: 'Comparador' },
+  { id: 'almacen', etiqueta: 'Almacén' },
+  { id: 'formularios', etiqueta: 'Formularios' },
+  { id: 'conflicto', etiqueta: 'Conflicto' },
+  { id: 'controles', etiqueta: 'Controles' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -85,7 +87,7 @@ function DashboardPage({ snapshot, conectado, error }: DashboardPageProps) {
             key={tab.id}
             onClick={() => cambiarTab(tab.id)}
           >
-            <span aria-hidden="true">{tab.icono}</span> {tab.etiqueta}
+            {tab.etiqueta}
           </button>
         ))}
       </div>
@@ -107,6 +109,7 @@ function DashboardPage({ snapshot, conectado, error }: DashboardPageProps) {
           {tabActiva === 'estadisticas' && (
             <EstadisticasPanel estadisticas={snapshot.estadisticas} recursos={snapshot.recursos} />
           )}
+          {tabActiva === 'comparador' && <ComparadorPanel />}
           {tabActiva === 'almacen' && <AlmacenPanel almacen={snapshot.almacen} />}
           {tabActiva === 'formularios' && (
             <FormulariosPanel

@@ -9,18 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Gestor de asignación no contigua de almacenamiento para lotes entrantes.
- * 
- * Concepto de SO: Asignación No Contigua de Memoria / Paginación e Indexación (Paging & Non-contiguous Allocation).
- * Divide un lote de tamaño arbitrario en bloques de tamaño celda (marcos de página) y los dispersa
- * en ubicaciones físicas libres, manteniendo la tabla de traducción lote → celdas (Page Table).
- * 
- * La búsqueda de celdas es "next-fit circular con paso coprimo": recorre todas las celdas una sola
- * vez desde un inicio pseudoaleatorio, pero salta de forma dispersa, por lo que un lote grande
- * termina repartido en pasillos o niveles no adyacentes (fragmentación externa real del almacén).
- * Toda la asignación corre bajo el cerrojo de escritura de {@link Almacen}.
- */
 @Component
 public class AsignadorUbicaciones {
 
@@ -109,6 +97,35 @@ public class AsignadorUbicaciones {
 
     public Map<String, List<AsignacionCelda>> getTablaAsignacion() {
         return Collections.unmodifiableMap(tablaAsignacion);
+    }
+
+    public void retirarProductos(Map<String, Integer> productos) {
+        almacen.enEscritura(() -> {
+            for (var entrada : productos.entrySet()) {
+                int disponible = almacen.celdasInternas().stream()
+                        .filter(celda -> entrada.getKey().equals(celda.getProductoId()))
+                        .mapToInt(Ubicacion::getUnidadesOcupadas).sum();
+                if (disponible < entrada.getValue()) {
+                    throw new IllegalStateException("Existencias físicas insuficientes: " + entrada.getKey());
+                }
+            }
+            for (var entrada : productos.entrySet()) {
+                int restante = entrada.getValue();
+                for (Ubicacion celda : almacen.celdasInternas()) {
+                    if (restante == 0) break;
+                    if (!entrada.getKey().equals(celda.getProductoId())) continue;
+                    String loteId = celda.getLoteId();
+                    restante -= celda.retirar(restante);
+                    List<AsignacionCelda> asignaciones = almacen.celdasInternas().stream()
+                            .filter(u -> loteId.equals(u.getLoteId()))
+                            .map(u -> new AsignacionCelda(u.getId(), u.getPasillo(), u.getNivel(),
+                                    u.getPosicion(), u.getUnidadesOcupadas()))
+                            .toList();
+                    tablaAsignacion.put(loteId, asignaciones);
+                }
+            }
+            return null;
+        });
     }
 
     public void limpiar() {

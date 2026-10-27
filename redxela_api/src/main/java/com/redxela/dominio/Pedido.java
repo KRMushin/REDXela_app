@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Bloque de Control de Proceso (PCB) de un pedido en el sistema REDXela.
  * 
- * Concepto de SO: Process Control Block (PCB). Almacena el identificador del proceso (PID),
+ * Process Control Block (PCB). Almacena el identificador del proceso (PID),
  * su estado actual, prioridad, tiempos de creación/inicio/fin, progreso del ciclo de ejecución
  * y la lista de descriptores de recursos que retiene y por el que se encuentra bloqueado.
  */
@@ -24,6 +24,8 @@ public class Pedido {
     private volatile EstadoPedido estado;
     private volatile Long tInicio;
     private volatile Long tFin;
+    private volatile long escalaTiempoMs = 60_000L;
+    private volatile boolean stockReservado;
     private volatile int progreso; // Porcentaje de 0 a 100
     private volatile TipoRecurso recursoEsperado;
 
@@ -64,6 +66,11 @@ public class Pedido {
 
     public Long getTInicio() { return tInicio; }
     public void setTInicio(Long tInicio) { this.tInicio = tInicio; }
+
+    public long getEscalaTiempoMs() { return escalaTiempoMs; }
+    public void setEscalaTiempoMs(long escalaTiempoMs) { this.escalaTiempoMs = escalaTiempoMs; }
+    public boolean isStockReservado() { return stockReservado; }
+    public void setStockReservado(boolean stockReservado) { this.stockReservado = stockReservado; }
 
     public Long getTFin() { return tFin; }
     public void setTFin(Long tFin) { this.tFin = tFin; }

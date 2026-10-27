@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Ejecuta una réplica aislada y determinista del planificador sobre una carga fija.
  *
- * Concepto de SO: Simulador de planificación de CPU de un solo procesador.
+ * Simulador de planificación de CPU de un solo procesador.
  * Modela llegadas, cola de listos y ejecución no expropiativa sin compartir colas,
  * reloj, hilos ni recursos con la simulación viva del centro de distribución.
  */
@@ -68,11 +68,10 @@ public class SimuladorPolitica {
             pedido.setTFin(aMs(relojMinutos));
 
             double espera = Math.max(0.0, inicio - creacion);
-            double ciclo = Math.max(0.0, relojMinutos - creacion);
             muestras.add(new Muestra(
                     pedido.getNivel(),
                     espera,
-                    ciclo <= pedido.getNivel().getTiempoObjetivoMinutos()
+                    espera <= pedido.getNivel().getTiempoObjetivoMinutos()
             ));
         }
 

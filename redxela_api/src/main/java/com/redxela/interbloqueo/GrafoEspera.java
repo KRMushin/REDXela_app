@@ -18,7 +18,7 @@ import java.util.TreeSet;
 /**
  * Grafo de espera (wait-for graph) construido a partir del estado de los recursos.
  * 
- * Concepto de SO: Grafo de Asignación/Espera de Recursos (Resource Allocation Graph).
+ * Grafo de Asignación/Espera de Recursos (Resource Allocation Graph).
  * Cada arista "proceso A espera al recurso R retenido por B" comprimido como A → B.
  * Un ciclo en este grafo es la condición de espera circular de Coffman y, si todos
  * los retenedores están bloqueados, constituye un interbloqueo real.

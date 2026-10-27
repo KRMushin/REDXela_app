@@ -1,14 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  { tab: 'recursos', label: 'Recursos', icon: '⚙️' },
-  { tab: 'pedidos', label: 'Pedidos', icon: '📋' },
-  { tab: 'espera', label: 'Lista de espera', icon: '⏳' },
-  { tab: 'estadisticas', label: 'Estadísticas', icon: '📊' },
-  { tab: 'almacen', label: 'Almacén', icon: '📦' },
-  { tab: 'formularios', label: 'Formularios', icon: '📝' },
-  { tab: 'conflicto', label: 'Conflicto', icon: '🔒' },
-  { tab: 'controles', label: 'Controles', icon: '🎛️' },
+  { tab: 'recursos', label: 'Recursos' },
+  { tab: 'pedidos', label: 'Pedidos' },
+  { tab: 'espera', label: 'Lista de espera' },
+  { tab: 'estadisticas', label: 'Estadísticas' },
+  { tab: 'comparador', label: 'Comparador' },
+  { tab: 'almacen', label: 'Almacén' },
+  { tab: 'formularios', label: 'Formularios' },
+  { tab: 'conflicto', label: 'Conflicto' },
+  { tab: 'controles', label: 'Controles' },
 ] as const;
 
 function Sidebar() {
@@ -18,13 +19,12 @@ function Sidebar() {
   return (
     <nav className="app-sidebar">
       <ul className="sidebar-nav">
-        {navItems.map(({ tab, label, icon }) => (
+        {navItems.map(({ tab, label }) => (
           <li key={tab}>
             <Link
               to={`/dashboard?tab=${tab}`}
               className={`sidebar-link ${tabActual === tab ? 'sidebar-link--active' : ''}`}
             >
-              <span className="sidebar-icon">{icon}</span>
               <span>{label}</span>
             </Link>
           </li>

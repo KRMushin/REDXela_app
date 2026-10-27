@@ -27,3 +27,11 @@ export function mensajeError(error: unknown): string {
   }
   return 'No fue posible completar la operación';
 }
+
+/** Permite distinguir un recurso aún no generado de un fallo real del backend. */
+export function esErrorNoEncontrado(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('status' in error)) {
+    return false;
+  }
+  return (error as { status?: number }).status === 404;
+}

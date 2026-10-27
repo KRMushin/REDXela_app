@@ -54,17 +54,11 @@ public class Despachador {
 
     /**
      * Único punto de salida de la lista de espera.
-     * Extrae el próximo pedido y actualiza su estado hacia EN_PROCESO.
      */
     public Optional<Pedido> despacharSiguiente(long tiempoActualMs) {
         PoliticaPlanificacion politica = politicaActiva.get();
         Optional<Pedido> siguiente = listaEspera.extraerSiguiente(politica, tiempoActualMs);
-        siguiente.ifPresent(pedido -> {
-            pedido.setEstado(EstadoPedido.EN_PROCESO);
-            if (pedido.getTInicio() == null) {
-                pedido.setTInicio(tiempoActualMs);
-            }
-        });
+        siguiente.ifPresent(pedido -> pedido.setEstado(EstadoPedido.EN_ESPERA_RECURSOS));
         return siguiente;
     }
 

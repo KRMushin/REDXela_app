@@ -4,21 +4,18 @@ interface StatusBadgeProps {
   status: BackendStatus;
 }
 
-const statusConfig: Record<BackendStatus, { label: string; className: string; dot: string }> = {
+const statusConfig: Record<BackendStatus, { label: string; className: string }> = {
   checking: {
     label: 'Verificando conexión...',
     className: 'badge badge--checking',
-    dot: '🟡',
   },
   connected: {
     label: 'Backend conectado',
     className: 'badge badge--connected',
-    dot: '🟢',
   },
   disconnected: {
     label: 'Backend desconectado',
     className: 'badge badge--disconnected',
-    dot: '🔴',
   },
 };
 
@@ -26,7 +23,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
   const config = statusConfig[status];
   return (
     <span className={config.className}>
-      {config.dot} {config.label}
+      {config.label}
     </span>
   );
 }

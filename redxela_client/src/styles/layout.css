@@ -30,10 +30,6 @@
   gap: 0.5rem;
 }
 
-.header-logo {
-  font-size: 1.4rem;
-}
-
 .header-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -86,10 +82,6 @@
 .sidebar-link--active:hover {
   background-color: var(--color-primary-hover);
   color: #fff;
-}
-
-.sidebar-icon {
-  font-size: 1rem;
 }
 
 /* ── Main content ────────────────────────────────────────────────────────── */

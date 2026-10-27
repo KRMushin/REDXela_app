@@ -1,4 +1,4 @@
-import type { EstadoPedido, NivelServicio, TipoPolitica } from './snapshot';
+import type { EstadoPedido, NivelServicio, TipoPolitica, TipoRecurso } from './snapshot';
 
 /** Tipos de las peticiones y respuestas REST del contrato. */
 
@@ -80,4 +80,73 @@ export interface ErrorApi {
   error: string;
   mensaje: string;
   [clave: string]: unknown;
+}
+
+/** Petición opcional para comparar las tres políticas de planificación. */
+export interface ComparacionRequest {
+  semilla?: number;
+  cantidadPedidos?: number;
+}
+
+export interface MetricaNivelComparacion {
+  nivel: NivelServicio;
+  nombre: string;
+  pedidos: number;
+  pedidosDentroSla: number;
+  tiempoObjetivoMinutos: number;
+  tiempoEsperaPromedioMinutos: number;
+  esperaMaximaMinutos: number;
+  cumplimientoSlaPorcentaje: number;
+}
+
+export interface ResultadoPolitica {
+  politica: TipoPolitica;
+  nombreLegible: string;
+  pedidosCompletados: number;
+  tiempoEsperaPromedioMinutos: number;
+  esperaMaximaMinutos: number;
+  pedidosDentroSla: number;
+  cumplimientoSlaPorcentaje: number;
+  tasaThroughputPorMinuto: number;
+  porNivel: MetricaNivelComparacion[];
+}
+
+export interface ComparacionPoliticas {
+  semilla: number;
+  cantidadPedidos: number;
+  generadoEn: number;
+  resultados: ResultadoPolitica[];
+}
+
+export interface MetricaNivelEstadisticas {
+  nivel: NivelServicio;
+  nombre: string;
+  pedidosCompletados: number;
+  tiempoEsperaPromedioMinutos: number;
+  tiempoProcesamientoPromedioMinutos: number;
+  tiempoObjetivoMinutos: number;
+  pedidosDentroSla: number;
+  cumplimientoSlaPorcentaje: number;
+}
+
+export interface OcupacionRecurso {
+  tipo: TipoRecurso;
+  nombre: string;
+  total: number;
+  disponibles: number;
+  enUso: number;
+  ocupacionPorcentaje: number;
+}
+
+export interface EstadisticasDetalladas {
+  pedidosCompletados: number;
+  pedidosEnEsperaStock: number;
+  pedidosEnEsperaRecursos: number;
+  tiempoEsperaPromedioMinutos: number;
+  tiempoProcesamientoPromedioMinutos: number;
+  pedidosDentroSla: number;
+  cumplimientoSlaPorcentaje: number;
+  tasaThroughputPorMinuto: number;
+  porNivel: MetricaNivelEstadisticas[];
+  ocupacionRecursos: OcupacionRecurso[];
 }

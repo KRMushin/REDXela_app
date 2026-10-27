@@ -3,7 +3,7 @@ package com.redxela.dominio;
 /**
  * Detalle de un artículo solicitado dentro de un pedido.
  * 
- * Concepto de SO: Parámetro de carga de trabajo de un hilo de ejecución.
+ * Parámetro de carga de trabajo de un hilo de ejecución.
  * Cada ítem aporta volumen de trabajo y define la tipología de recursos que el hilo demandará.
  */
 public record ItemPedido(

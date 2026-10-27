@@ -15,8 +15,7 @@ import java.util.Map;
 
 /**
  * Controlador REST para observar, provocar y resolver interbloqueos.
- * 
- * Concepto de SO: Interfaz administrativa de detección y recuperación de interbloqueos
+ * Interfaz administrativa de detección y recuperación de interbloqueos
  * (deadlock management). Permite al operador cambiar el modo de prevención, forzar el
  * escenario de conflicto y elegir manualmente qué proceso conserva los recursos.
  */

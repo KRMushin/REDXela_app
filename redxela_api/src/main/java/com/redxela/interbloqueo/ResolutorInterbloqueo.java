@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Resolución manual del interbloqueo elegida por el operador.
  * 
- * Concepto de SO: Recuperación por expropiación (preemption). El proceso ganador
+ * Recuperación por expropiación (preemption). El proceso ganador
  * conserva los recursos disputados; los perdedores reciben una interrupción, su
  * bloque finally libera todo lo retenido y vuelven a la lista de espera para ser
  * atendidos más adelante. Se rompe la espera circular sin reiniciar el sistema.
@@ -60,6 +60,10 @@ public class ResolutorInterbloqueo {
         for (String perdedor : perdedores) {
             expropiar(perdedor);
         }
+
+        pedidoService.buscarPorId(pedidoGanadorId)
+                .filter(p -> p.getEstado() == com.redxela.dominio.EstadoPedido.COMPLETADO)
+                .ifPresent(p -> pedidoService.intentarDespachar());
 
         // Los perdedores quedan en la cola de listos; el despachador los reanudará
         // cuando el ganador libere sus recursos (evento de finalización).

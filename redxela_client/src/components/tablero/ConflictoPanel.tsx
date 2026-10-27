@@ -50,7 +50,7 @@ function ConflictoPanel({ snapshot }: ConflictoPanelProps) {
 
       {reporte.hayInterbloqueo ? (
         <div className="conflicto-alerta">
-          <p className="conflicto-alerta__titulo">⚠ Espera circular detectada</p>
+          <p className="conflicto-alerta__titulo">Espera circular detectada</p>
           <div className="conflicto-datos">
             <div>
               <span className="mini-etiqueta">Recursos en disputa</span>

@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Compara las tres políticas de planificación sobre una réplica aislada del sistema.
  *
- * Concepto de SO: Benchmark de algoritmos de planificación (Scheduler Benchmark).
+ * Benchmark de algoritmos de planificación (Scheduler Benchmark).
  * Serializa las ejecuciones con un cerrojo justo, genera una única carga con semilla
  * fija y conserva el último resultado sin tocar las colas ni los recursos vivos.
  */

@@ -10,8 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Catálogo centralizado y en memoria de productos disponibles en REDXela.
- * 
- * Concepto de SO: Tabla de descriptores de archivos/datos estáticos cargados
+ * Tabla de descriptores de archivos/datos estáticos cargados
  * en la memoria del kernel al inicializar el sistema (VFS / Static Inodes Table).
  */
 @Component

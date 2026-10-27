@@ -103,6 +103,8 @@ export interface Estadisticas {
   tiempoProcesamientoPromedioMinutos: number;
   cumplimientoSlaPorcentaje: number;
   tasaThroughputPorMinuto: number;
+  pedidosEnEsperaStock: number;
+  pedidosEnEsperaRecursos: number;
 }
 
 export interface SnapshotEstado {
